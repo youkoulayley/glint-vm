@@ -1,0 +1,59 @@
+version: "2"
+
+run:
+  timeout: 5m
+
+linters:
+  default: all
+  disable:
+    - wsl # Deprecated
+    - cyclop # Duplicate of gocyclo
+    - depguard # Not configured, blocking legitimate imports
+    - dupl # Too restrictive
+    - exhaustruct # Too restrictive
+    - dupword # Too restrictive
+    - varnamelen # Too restrictive
+    - noinlineerr # Too restrictive
+    - forbidigo # This tool is a commandline
+    - tagliatelle # JSON field naming is dictated by external APIs
+    - testpackage # Test package naming is a style choice
+  exclusions:
+    rules:
+      - path: '(.+)_test\.go'
+        linters:
+          - funlen
+      - path: 'cmd/glint-vm/(.+)'
+        linters:
+          - funlen
+      - path: 'internal/config/config_test.go'
+        linters:
+          - nestif
+
+linters-settings:
+  gocritic:
+    enabled-tags:
+      - diagnostic
+      - style
+      - performance
+    disabled-checks:
+      - unnamedResult  # Can be noisy for simple functions
+
+  revive:
+    rules:
+      - name: exported
+        disabled: false
+      - name: var-naming
+        disabled: false
+      - name: package-comments
+        disabled: true  # Can be noisy for internal packages
+
+  gocyclo:
+    min-complexity: 15
+
+  funlen:
+    lines: 100  # Allow longer functions
+    statements: 60  # Allow more statements
+
+  gochecknoglobals:
+    # Allow globals for build-time variables and immutable patterns
+    check-no-globals: true

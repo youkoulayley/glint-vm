@@ -1,0 +1,82 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: 'go.mod'
+
+      - name: Read golangci-lint version
+        id: golangci_version
+        run: echo "version=$(cat .golangci-lint.version)" >> $GITHUB_OUTPUT
+
+      - name: Run golangci-lint
+        uses: golangci/golangci-lint-action@v4
+        with:
+          version: ${{ steps.golangci_version.outputs.version }}
+          args: --timeout=5m
+
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: 'go.mod'
+
+      - name: Run tests with coverage
+        run: make test-coverage
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v4
+        if: success() && github.ref == 'refs/heads/main'
+        with:
+          files: ./coverage.out
+          fail_ci_if_error: false
+        continue-on-error: true
+
+  build:
+    name: Build
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: 'go.mod'
+
+      - name: Build
+        run: make build
+
+      - name: Test binary
+        run: ./dist/glint-vm version
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        if: matrix.os == 'ubuntu-latest' && github.ref == 'refs/heads/main'
+        with:
+          name: glint-vm-linux-amd64
+          path: dist/glint-vm
+          retention-days: 7

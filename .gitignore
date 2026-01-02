@@ -1,0 +1,40 @@
+# Binaries
+glint-vm
+glint-vm.exe
+*.exe
+*.dll
+*.so
+*.dylib
+
+# Test binaries
+*.test
+
+# Coverage
+coverage.out
+coverage.html
+*.coverprofile
+
+# Build artifacts
+build/
+dist/
+
+# Go workspace
+vendor/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Temporary files
+*.tmp
+*.log
+
+# Allowed
+!cmd/glint-vm/
