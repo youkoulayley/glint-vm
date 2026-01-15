@@ -14,7 +14,7 @@ const (
 	AppName = "glint-vm"
 	// VersionsDir is the subdirectory name for storing versions.
 	VersionsDir                     = "versions"
-	directoryPermission os.FileMode = 0700
+	directoryPermission os.FileMode = 0o700
 	windows                         = "windows"
 )
 
@@ -114,7 +114,7 @@ func (c *Config) BinaryExists(version string) bool {
 func isExecutable(info os.FileInfo) bool {
 	// On Unix systems, check if any execute bit is set
 	if runtime.GOOS != windows {
-		return info.Mode().Perm()&0111 != 0
+		return info.Mode().Perm()&0o111 != 0
 	}
 	// On Windows, any regular file can be "executed" if it has the right extension
 	return true

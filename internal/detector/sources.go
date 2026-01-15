@@ -1,7 +1,6 @@
 package detector
 
 import (
-	"errors"
 	"fmt"
 	"os"
 	"path/filepath"
@@ -9,8 +8,6 @@ import (
 
 	"github.com/youkoulayley/glint-vm/internal/config"
 )
-
-var errInvalidVersion = errors.New("invalid version")
 
 // DetectionResult represents the result of version detection.
 type DetectionResult struct {
@@ -43,6 +40,10 @@ func (d *VersionFileDetector) Detect(baseDir string) (*DetectionResult, error) {
 
 	content, err := os.ReadFile(filePath) //nolint:gosec // Path is constructed internally
 	if err != nil {
+		if os.IsNotExist(err) {
+			return nil, nil //nolint:nilnil // File doesn't exist, not an error
+		}
+
 		return nil, fmt.Errorf("failed to read version file: %w", err)
 	}
 
@@ -56,7 +57,7 @@ func (d *VersionFileDetector) Detect(baseDir string) (*DetectionResult, error) {
 
 		// Validate it's a proper version
 		if !ValidateVersion(version) {
-			return nil, errInvalidVersion
+			return nil, nil //nolint:nilnil // Invalid version format, not an error
 		}
 
 		pattern = "plain-version"
@@ -86,6 +87,10 @@ func (d *GitHubActionsDetector) Detect(baseDir string) (*DetectionResult, error)
 
 	entries, err := os.ReadDir(workflowsDir)
 	if err != nil {
+		if os.IsNotExist(err) {
+			return nil, nil //nolint:nilnil // Directory doesn't exist, not an error
+		}
+
 		return nil, fmt.Errorf("failed to read workflows directory: %w", err)
 	}
 
@@ -120,7 +125,7 @@ func (d *GitHubActionsDetector) Detect(baseDir string) (*DetectionResult, error)
 		}
 	}
 
-	return nil, errInvalidVersion
+	return nil, nil //nolint:nilnil // No version found in workflows, not an error
 }
 
 // SemaphoreDetector detects version from Semaphore CI config.
@@ -137,12 +142,16 @@ func (d *SemaphoreDetector) Detect(baseDir string) (*DetectionResult, error) {
 
 	content, err := os.ReadFile(filePath) //nolint:gosec // Path is constructed internally
 	if err != nil {
+		if os.IsNotExist(err) {
+			return nil, nil //nolint:nilnil // File doesn't exist, not an error
+		}
+
 		return nil, fmt.Errorf("failed to read semaphore config: %w", err)
 	}
 
 	version, pattern, lineNum := ExtractVersionFromLines(string(content))
 	if version == "" {
-		return nil, errInvalidVersion
+		return nil, nil //nolint:nilnil // No version found in config, not an error
 	}
 
 	return &DetectionResult{
@@ -191,7 +200,7 @@ func (d *MakefileDetector) Detect(baseDir string) (*DetectionResult, error) {
 		}
 	}
 
-	return nil, errInvalidVersion
+	return nil, nil //nolint:nilnil // No Makefile found, not an error
 }
 
 // CircleCIDetector detects version from CircleCI config.
@@ -208,12 +217,16 @@ func (d *CircleCIDetector) Detect(baseDir string) (*DetectionResult, error) {
 
 	content, err := os.ReadFile(filePath) //nolint:gosec // Path is constructed internally
 	if err != nil {
+		if os.IsNotExist(err) {
+			return nil, nil //nolint:nilnil // File doesn't exist, not an error
+		}
+
 		return nil, fmt.Errorf("failed to read circleci config: %w", err)
 	}
 
 	version, pattern, lineNum := ExtractVersionFromLines(string(content))
 	if version == "" {
-		return nil, errInvalidVersion
+		return nil, nil //nolint:nilnil // No version found in config, not an error
 	}
 
 	return &DetectionResult{
@@ -239,12 +252,16 @@ func (d *GitLabCIDetector) Detect(baseDir string) (*DetectionResult, error) {
 
 	content, err := os.ReadFile(filePath) //nolint:gosec // Path is constructed internally
 	if err != nil {
+		if os.IsNotExist(err) {
+			return nil, nil //nolint:nilnil // File doesn't exist, not an error
+		}
+
 		return nil, fmt.Errorf("failed to read gitlab-ci config: %w", err)
 	}
 
 	version, pattern, lineNum := ExtractVersionFromLines(string(content))
 	if version == "" {
-		return nil, errInvalidVersion
+		return nil, nil //nolint:nilnil // No version found in config, not an error
 	}
 
 	return &DetectionResult{
@@ -282,7 +299,7 @@ func DetectVersion(baseDir string) (*DetectionResult, error) {
 		}
 	}
 
-	return nil, errInvalidVersion
+	return nil, nil //nolint:nilnil // No version detected from any source, not an error
 }
 
 // DetectVersionFromAll attempts detection using all sources and returns all results.

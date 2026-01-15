@@ -21,7 +21,7 @@ func TestVersionFileDetector(t *testing.T) {
 		// Create version file
 		versionFilePath := filepath.Join(tmpDir, ".golangci-lint.version")
 
-		err := os.WriteFile(versionFilePath, []byte("v1.55.2\n"), 0644) //nolint:gosec // Test file
+		err := os.WriteFile(versionFilePath, []byte("v1.55.2\n"), 0644)
 		if err != nil {
 			t.Fatalf("Failed to create test file: %v", err)
 		}
@@ -65,14 +65,13 @@ func TestVersionFileDetector(t *testing.T) {
 func TestGitHubActionsDetector(t *testing.T) {
 	t.Parallel()
 
-	tmpDir := t.TempDir()
-
 	t.Run("detects version from workflow file", func(t *testing.T) {
 		t.Parallel()
+		tmpDir := t.TempDir()
 		// Create .github/workflows directory
 		workflowDir := filepath.Join(tmpDir, ".github", "workflows")
 
-		err := os.MkdirAll(workflowDir, 0755) //nolint:gosec // Test directory
+		err := os.MkdirAll(workflowDir, 0755)
 		if err != nil {
 			t.Fatalf("Failed to create workflows dir: %v", err)
 		}
@@ -92,7 +91,7 @@ jobs:
 `
 		workflowFile := filepath.Join(workflowDir, "lint.yml")
 
-		err = os.WriteFile(workflowFile, []byte(workflowContent), 0644) //nolint:gosec // Test file
+		err = os.WriteFile(workflowFile, []byte(workflowContent), 0644)
 		if err != nil {
 			t.Fatalf("Failed to create workflow file: %v", err)
 		}
@@ -139,10 +138,10 @@ jobs:
 	t.Run("multiple workflow files - returns first match", func(t *testing.T) {
 		t.Parallel()
 
+		tmpDir := t.TempDir()
 		workflowDir := filepath.Join(tmpDir, ".github", "workflows")
-		_ = os.RemoveAll(workflowDir)
 
-		err := os.MkdirAll(workflowDir, 0755) //nolint:gosec // Test directory
+		err := os.MkdirAll(workflowDir, 0755)
 		if err != nil {
 			t.Fatalf("Failed to create workflows dir: %v", err)
 		}
@@ -150,7 +149,7 @@ jobs:
 		// Create first workflow with version
 		workflow1 := filepath.Join(workflowDir, "ci.yml")
 
-		err = os.WriteFile(workflow1, []byte("version: v1.54.0\n"), 0644) //nolint:gosec // Test file
+		err = os.WriteFile(workflow1, []byte("version: v1.54.0\n"), 0644)
 		if err != nil {
 			t.Fatalf("Failed to create workflow: %v", err)
 		}
@@ -158,7 +157,7 @@ jobs:
 		// Create second workflow
 		workflow2 := filepath.Join(workflowDir, "lint.yml")
 
-		err = os.WriteFile(workflow2, []byte("version: v1.55.0\n"), 0644) //nolint:gosec // Test file
+		err = os.WriteFile(workflow2, []byte("version: v1.55.0\n"), 0644)
 		if err != nil {
 			t.Fatalf("Failed to create workflow: %v", err)
 		}
@@ -183,11 +182,10 @@ jobs:
 func TestMakefileDetector(t *testing.T) {
 	t.Parallel()
 
-	tmpDir := t.TempDir()
-
 	t.Run("detects version from Makefile", func(t *testing.T) {
 		t.Parallel()
 
+		tmpDir := t.TempDir()
 		makefileContent := `GOLANGCI_LINT_VERSION := v1.55.2
 
 .PHONY: lint
@@ -196,7 +194,7 @@ lint:
 `
 		makefilePath := filepath.Join(tmpDir, "Makefile")
 
-		err := os.WriteFile(makefilePath, []byte(makefileContent), 0644) //nolint:gosec // Test file
+		err := os.WriteFile(makefilePath, []byte(makefileContent), 0644)
 		if err != nil {
 			t.Fatalf("Failed to create Makefile: %v", err)
 		}
@@ -228,7 +226,7 @@ lint:
 `
 		makefilePath := filepath.Join(tmpDir2, "makefile")
 
-		err := os.WriteFile(makefilePath, []byte(makefileContent), 0644) //nolint:gosec // Test file
+		err := os.WriteFile(makefilePath, []byte(makefileContent), 0644)
 		if err != nil {
 			t.Fatalf("Failed to create makefile: %v", err)
 		}
@@ -268,14 +266,13 @@ lint:
 func TestSemaphoreDetector(t *testing.T) {
 	t.Parallel()
 
-	tmpDir := t.TempDir()
-
 	t.Run("detects version from semaphore config", func(t *testing.T) {
 		t.Parallel()
 
+		tmpDir := t.TempDir()
 		semaphoreDir := filepath.Join(tmpDir, ".semaphore")
 
-		err := os.MkdirAll(semaphoreDir, 0755) //nolint:gosec // Test directory
+		err := os.MkdirAll(semaphoreDir, 0755)
 		if err != nil {
 			t.Fatalf("Failed to create .semaphore dir: %v", err)
 		}
@@ -297,7 +294,7 @@ blocks:
 `
 		configPath := filepath.Join(semaphoreDir, "semaphore.yml")
 
-		err = os.WriteFile(configPath, []byte(semaphoreContent), 0644) //nolint:gosec // Test file
+		err = os.WriteFile(configPath, []byte(semaphoreContent), 0644)
 		if err != nil {
 			t.Fatalf("Failed to create semaphore config: %v", err)
 		}
@@ -341,14 +338,13 @@ blocks:
 func TestCircleCIDetector(t *testing.T) {
 	t.Parallel()
 
-	tmpDir := t.TempDir()
-
 	t.Run("detects version from circleci config", func(t *testing.T) {
 		t.Parallel()
 
+		tmpDir := t.TempDir()
 		circleCIDir := filepath.Join(tmpDir, ".circleci")
 
-		err := os.MkdirAll(circleCIDir, 0755) //nolint:gosec // Test directory
+		err := os.MkdirAll(circleCIDir, 0755)
 		if err != nil {
 			t.Fatalf("Failed to create .circleci dir: %v", err)
 		}
@@ -364,7 +360,7 @@ jobs:
 `
 		configPath := filepath.Join(circleCIDir, "config.yml")
 
-		err = os.WriteFile(configPath, []byte(circleContent), 0644) //nolint:gosec // Test file
+		err = os.WriteFile(configPath, []byte(circleContent), 0644)
 		if err != nil {
 			t.Fatalf("Failed to create circleci config: %v", err)
 		}
@@ -393,11 +389,10 @@ jobs:
 func TestGitLabCIDetector(t *testing.T) {
 	t.Parallel()
 
-	tmpDir := t.TempDir()
-
 	t.Run("detects version from gitlab-ci config", func(t *testing.T) {
 		t.Parallel()
 
+		tmpDir := t.TempDir()
 		gitlabContent := `stages:
   - lint
 
@@ -408,7 +403,7 @@ lint:
 `
 		configPath := filepath.Join(tmpDir, ".gitlab-ci.yml")
 
-		err := os.WriteFile(configPath, []byte(gitlabContent), 0644) //nolint:gosec // Test file
+		err := os.WriteFile(configPath, []byte(gitlabContent), 0644)
 		if err != nil {
 			t.Fatalf("Failed to create gitlab-ci config: %v", err)
 		}
@@ -437,14 +432,13 @@ lint:
 func TestDetectVersion(t *testing.T) {
 	t.Parallel()
 
-	tmpDir := t.TempDir()
-
 	t.Run("detects from highest priority source", func(t *testing.T) {
 		t.Parallel()
+		tmpDir := t.TempDir()
 		// Create version file (highest priority)
-		versionFile := filepath.Join(tmpDir, ".golangci-lint.version")
+		versionFilePath := filepath.Join(tmpDir, ".golangci-lint.version")
 
-		err := os.WriteFile(versionFile, []byte("v1.60.0\n"), 0644) //nolint:gosec // Test file
+		err := os.WriteFile(versionFilePath, []byte("v1.60.0\n"), 0644)
 		if err != nil {
 			t.Fatalf("Failed to create version file: %v", err)
 		}
@@ -452,7 +446,7 @@ func TestDetectVersion(t *testing.T) {
 		// Also create a Makefile with different version (lower priority)
 		makefilePath := filepath.Join(tmpDir, "Makefile")
 
-		err = os.WriteFile(makefilePath, []byte("GOLANGCI_LINT_VERSION := v1.55.2\n"), 0644) //nolint:gosec // Test file
+		err = os.WriteFile(makefilePath, []byte("GOLANGCI_LINT_VERSION := v1.55.2\n"), 0644)
 		if err != nil {
 			t.Fatalf("Failed to create Makefile: %v", err)
 		}
@@ -493,14 +487,13 @@ func TestDetectVersion(t *testing.T) {
 func TestDetectVersionFromAll(t *testing.T) {
 	t.Parallel()
 
-	tmpDir := t.TempDir()
-
 	t.Run("detects from multiple sources", func(t *testing.T) {
 		t.Parallel()
+		tmpDir := t.TempDir()
 		// Create version file
-		versionFile := filepath.Join(tmpDir, ".golangci-lint.version")
+		versionFilePath := filepath.Join(tmpDir, ".golangci-lint.version")
 
-		err := os.WriteFile(versionFile, []byte("v1.60.0\n"), 0644) //nolint:gosec // Test file
+		err := os.WriteFile(versionFilePath, []byte("v1.60.0\n"), 0644)
 		if err != nil {
 			t.Fatalf("Failed to create version file: %v", err)
 		}
@@ -508,7 +501,7 @@ func TestDetectVersionFromAll(t *testing.T) {
 		// Create Makefile
 		makefilePath := filepath.Join(tmpDir, "Makefile")
 
-		err = os.WriteFile(makefilePath, []byte("GOLANGCI_LINT_VERSION := v1.55.2\n"), 0644) //nolint:gosec // Test file
+		err = os.WriteFile(makefilePath, []byte("GOLANGCI_LINT_VERSION := v1.55.2\n"), 0644)
 		if err != nil {
 			t.Fatalf("Failed to create Makefile: %v", err)
 		}

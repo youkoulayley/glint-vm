@@ -25,7 +25,7 @@ func (b *BashShell) GenerateInit(opts InitOptions) string {
 	var builder strings.Builder
 
 	// Export GLINT_VM_ROOT
-	builder.WriteString(fmt.Sprintf("export GLINT_VM_ROOT=\"%s\"\n", root))
+	builder.WriteString(fmt.Sprintf("export GLINT_VM_ROOT=%q\n", root))
 
 	// Add current directory to PATH
 	builder.WriteString(fmt.Sprintf("export PATH=\"%s:$PATH\"\n", currentDir))
@@ -51,7 +51,7 @@ func (b *BashShell) GenerateUse(version string) string {
 	builder.WriteString(fmt.Sprintf("export PATH=\"%s:$PATH\"\n", currentDir))
 
 	// Export GLINT_VM_VERSION
-	builder.WriteString(fmt.Sprintf("export GLINT_VM_VERSION=\"%s\"\n", version))
+	builder.WriteString(fmt.Sprintf("export GLINT_VM_VERSION=%q\n", version))
 
 	// Echo success message to stderr (so stdout is clean for eval)
 	builder.WriteString(fmt.Sprintf("echo \"Switched to golangci-lint %s\" >&2\n", version))

@@ -49,7 +49,7 @@ func TestNew(t *testing.T) {
 		t.Parallel()
 		tmpFile := filepath.Join(t.TempDir(), "file.txt")
 
-		err := os.WriteFile(tmpFile, []byte("test"), 0644) //nolint:gosec // Test file
+		err := os.WriteFile(tmpFile, []byte("test"), 0644)
 		if err != nil {
 			t.Fatalf("Failed to create test file: %v", err)
 		}
@@ -71,7 +71,7 @@ func TestDetect(t *testing.T) {
 		// Create a version file
 		versionFile := filepath.Join(tmpDir, ".golangci-lint.version")
 
-		err := os.WriteFile(versionFile, []byte("v1.55.2\n"), 0644) //nolint:gosec // Test file
+		err := os.WriteFile(versionFile, []byte("v1.55.2\n"), 0644)
 		if err != nil {
 			t.Fatalf("Failed to create version file: %v", err)
 		}
@@ -121,7 +121,7 @@ func TestDetectAll(t *testing.T) {
 		// Create version file
 		versionFile := filepath.Join(tmpDir, ".golangci-lint.version")
 
-		err := os.WriteFile(versionFile, []byte("v1.60.0\n"), 0644) //nolint:gosec // Test file
+		err := os.WriteFile(versionFile, []byte("v1.60.0\n"), 0644)
 		if err != nil {
 			t.Fatalf("Failed to create version file: %v", err)
 		}
@@ -129,7 +129,7 @@ func TestDetectAll(t *testing.T) {
 		// Create Makefile
 		makefile := filepath.Join(tmpDir, "Makefile")
 
-		err = os.WriteFile(makefile, []byte("GOLANGCI_LINT_VERSION := v1.55.2\n"), 0644) //nolint:gosec // Test file
+		err = os.WriteFile(makefile, []byte("GOLANGCI_LINT_VERSION := v1.55.2\n"), 0644)
 		if err != nil {
 			t.Fatalf("Failed to create Makefile: %v", err)
 		}
@@ -159,7 +159,7 @@ func TestDetectWithFallback(t *testing.T) {
 
 		versionFile := filepath.Join(tmpDir, ".golangci-lint.version")
 
-		err := os.WriteFile(versionFile, []byte("v1.55.2\n"), 0644) //nolint:gosec // Test file
+		err := os.WriteFile(versionFile, []byte("v1.55.2\n"), 0644)
 		if err != nil {
 			t.Fatalf("Failed to create version file: %v", err)
 		}
@@ -227,7 +227,7 @@ func TestQuickDetect(t *testing.T) { //nolint:paralleltest // uses t.Chdir
 		tmpDir := t.TempDir()
 		versionFile := filepath.Join(tmpDir, ".golangci-lint.version")
 
-		err = os.WriteFile(versionFile, []byte("v1.55.2\n"), 0644) //nolint:gosec // Test file
+		err = os.WriteFile(versionFile, []byte("v1.55.2\n"), 0644)
 		if err != nil {
 			t.Fatalf("Failed to create version file: %v", err)
 		}
@@ -254,7 +254,7 @@ func TestQuickDetectFrom(t *testing.T) {
 
 		versionFile := filepath.Join(tmpDir, ".golangci-lint.version")
 
-		err := os.WriteFile(versionFile, []byte("v1.55.2\n"), 0644) //nolint:gosec // Test file
+		err := os.WriteFile(versionFile, []byte("v1.55.2\n"), 0644)
 		if err != nil {
 			t.Fatalf("Failed to create version file: %v", err)
 		}

@@ -24,7 +24,7 @@ jobs:
         run: echo "version=$(cat .golangci-lint.version)" >> $GITHUB_OUTPUT
 
       - name: Run golangci-lint
-        uses: golangci/golangci-lint-action@v4
+        uses: golangci/golangci-lint-action@v9
         with:
           version: ${{ steps.golangci_version.outputs.version }}
           args: --timeout=5m
@@ -71,7 +71,7 @@ jobs:
         run: make build
 
       - name: Test binary
-        run: ./dist/glint-vm version
+        run: ./dist/glint-vm --version
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4

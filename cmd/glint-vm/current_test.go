@@ -10,9 +10,7 @@ import (
 	"github.com/youkoulayley/glint-vm/internal/config"
 )
 
-func TestCurrentCommand_NoVersion(t *testing.T) {
-	t.Parallel()
-
+func TestCurrentCommand_NoVersion(t *testing.T) { //nolint:paralleltest // use SetEnv
 	_, cleanup := setupTestEnv(t)
 	defer cleanup()
 
@@ -34,9 +32,7 @@ func TestCurrentCommand_NoVersion(t *testing.T) {
 	}
 }
 
-func TestCurrentCommand_WithVersion(t *testing.T) {
-	t.Parallel()
-
+func TestCurrentCommand_WithVersion(t *testing.T) { //nolint:paralleltest // use SetEnv
 	if os.Getenv("GOOS") == "windows" {
 		t.Skip("Skipping symlink test on Windows")
 	}
@@ -57,14 +53,14 @@ func TestCurrentCommand_WithVersion(t *testing.T) {
 
 	binaryPath := cfg.GetBinaryPath(version)
 
-	file, err := os.Create(binaryPath) //nolint:gosec // Test file creation
+	file, err := os.Create(binaryPath)
 	if err != nil {
 		t.Fatalf("Failed to create binary: %v", err)
 	}
 
 	_ = file.Close()
 
-	if err := os.Chmod(binaryPath, 0755); err != nil { //nolint:gosec // Test file permissions
+	if err := os.Chmod(binaryPath, 0755); err != nil { // Test file permissions
 		t.Fatalf("Failed to chmod binary: %v", err)
 	}
 
