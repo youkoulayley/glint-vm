@@ -22,7 +22,7 @@ const (
 	gitHubReleasesURL                = "https://github.com/golangci/golangci-lint/releases/download"
 	downloadTimeout                  = 10 * time.Minute
 	maxExtractSize                   = 500 * 1024 * 1024
-	executablePermission os.FileMode = 0755
+	executablePermission os.FileMode = 0o755
 )
 
 // Downloader handles downloading golangci-lint binaries.
@@ -129,7 +129,7 @@ func (d *Downloader) getDownloadURL(version string) string {
 
 // downloadFile downloads a file from URL to destination.
 func (d *Downloader) downloadFile(url, dest string) error {
-	req, err := http.NewRequestWithContext(context.Background(), http.MethodGet, url, nil)
+	req, err := http.NewRequestWithContext(context.Background(), http.MethodGet, url, http.NoBody)
 	if err != nil {
 		return fmt.Errorf("failed to create request: %w", err)
 	}
@@ -164,7 +164,7 @@ func (d *Downloader) downloadFile(url, dest string) error {
 // verifyChecksum downloads the checksum file and verifies the archive.
 func (d *Downloader) verifyChecksum(archivePath, checksumURL string) error {
 	// Download checksum file
-	req, err := http.NewRequestWithContext(context.Background(), http.MethodGet, checksumURL, nil)
+	req, err := http.NewRequestWithContext(context.Background(), http.MethodGet, checksumURL, http.NoBody)
 	if err != nil {
 		fmt.Fprintln(os.Stderr, "Warning: Could not create checksum request, skipping verification")
 

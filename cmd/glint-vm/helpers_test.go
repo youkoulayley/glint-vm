@@ -27,7 +27,12 @@ func setupTestEnv(t *testing.T) (string, func()) {
 
 func captureOutput(f func()) string {
 	old := os.Stdout
-	pipe, w, _ := os.Pipe()
+
+	r, w, err := os.Pipe()
+	if err != nil {
+		panic(err)
+	}
+
 	os.Stdout = w
 
 	f()
@@ -37,7 +42,7 @@ func captureOutput(f func()) string {
 
 	var buf bytes.Buffer
 
-	_, _ = buf.ReadFrom(pipe)
+	_, _ = buf.ReadFrom(r)
 
 	return buf.String()
 }

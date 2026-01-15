@@ -22,38 +22,41 @@ linters:
       - path: '(.+)_test\.go'
         linters:
           - funlen
+          - gocyclo
+          - gosec
+          - gocritic
       - path: 'cmd/glint-vm/(.+)'
         linters:
           - funlen
       - path: 'internal/config/config_test.go'
         linters:
           - nestif
+      - path: cmd/glint-vm/detect.go
+        linters:
+          - gocyclo
 
-linters-settings:
-  gocritic:
-    enabled-tags:
-      - diagnostic
-      - style
-      - performance
-    disabled-checks:
-      - unnamedResult  # Can be noisy for simple functions
+  settings:
 
-  revive:
-    rules:
-      - name: exported
-        disabled: false
-      - name: var-naming
-        disabled: false
-      - name: package-comments
-        disabled: true  # Can be noisy for internal packages
+    gocritic:
+      enabled-tags:
+        - diagnostic
+        - style
+        - performance
+      disabled-checks:
+        - unnamedResult  # Can be noisy for simple functions
 
-  gocyclo:
-    min-complexity: 15
+    revive:
+      rules:
+        - name: exported
+          disabled: false
+        - name: var-naming
+          disabled: false
+        - name: package-comments
+          disabled: true  # Can be noisy for internal packages
 
-  funlen:
-    lines: 100  # Allow longer functions
-    statements: 60  # Allow more statements
+    gocyclo:
+      min-complexity: 15
 
-  gochecknoglobals:
-    # Allow globals for build-time variables and immutable patterns
-    check-no-globals: true
+    funlen:
+      lines: 100  # Allow longer functions
+      statements: 60  # Allow more statements

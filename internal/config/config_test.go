@@ -317,7 +317,7 @@ func TestBinaryExists(t *testing.T) {
 
 	binaryPath := cfg.GetBinaryPath(version)
 	// Create an empty file
-	file, err := os.Create(binaryPath) //nolint:gosec // Test file creation
+	file, err := os.Create(binaryPath)
 	if err != nil {
 		t.Fatalf("failed to create binary file: %v", err)
 	}
@@ -326,7 +326,7 @@ func TestBinaryExists(t *testing.T) {
 
 	// Make it executable (on Unix systems)
 	if runtime.GOOS != windows {
-		err = os.Chmod(binaryPath, 0755) //nolint:gosec // Test file permissions
+		err = os.Chmod(binaryPath, 0755)
 		if err != nil {
 			t.Fatalf("failed to chmod binary: %v", err)
 		}
@@ -411,14 +411,14 @@ func setupTestBinary(t *testing.T, cfg *Config, version string) {
 
 	binaryPath := cfg.GetBinaryPath(version)
 
-	file, err := os.Create(binaryPath) //nolint:gosec // Test file with controlled path
+	file, err := os.Create(binaryPath)
 	if err != nil {
 		t.Fatalf("failed to create binary: %v", err)
 	}
 
 	_ = file.Close()
 
-	if err := os.Chmod(binaryPath, 0o755); err != nil { //nolint:gosec // Test binary needs execute permission
+	if err := os.Chmod(binaryPath, 0o755); err != nil {
 		t.Fatalf("failed to chmod binary: %v", err)
 	}
 }
@@ -501,7 +501,7 @@ func TestSetCurrentVersion(t *testing.T) {
 
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
-		t.Parallel()
+			t.Parallel()
 			// Skip symlink tests on Windows
 			if runtime.GOOS == windows {
 				t.Skip("Skipping symlink test on Windows")
@@ -605,7 +605,7 @@ func TestGetCurrentVersion(t *testing.T) {
 
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
-		t.Parallel()
+			t.Parallel()
 			// Skip symlink tests on Windows
 			if runtime.GOOS == windows {
 				t.Skip("Skipping symlink test on Windows")
