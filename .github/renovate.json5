@@ -56,6 +56,11 @@
     'gomodMassage',
     'gomodUpdateImportPaths',
   ],
+  postUpgradeTasks: {
+    "commands": [
+      "make"
+    ]
+  },
   ignoreDeps: [],
   semanticCommits: 'enabled',
 }
