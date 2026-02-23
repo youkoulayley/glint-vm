@@ -1,4 +1,6 @@
 // Package version provides build-time version information.
+//
+//nolint:revive //Internal package.
 package version
 
 // These variables are set via ldflags during build.
