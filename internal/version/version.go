@@ -1,9 +1,9 @@
 // Package version provides build-time version information.
-//
-//nolint:revive // "version" is not actually a standard library package
 package version
 
 // These variables are set via ldflags during build.
+//
+//nolint:gochecknoglobals // These globals are required for ldflags injection
 var (
 	versionValue = "dev"
 	commitValue  = "unknown"

@@ -39,7 +39,6 @@ func FetchAvailableVersions(limit int) ([]GitHubRelease, error) {
 		Timeout: clientTimeout,
 	}
 
-	//nolint:gosec // URL is constructed from hardcoded GitHub API URL constant
 	resp, err := client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("failed to fetch releases: %w", err)

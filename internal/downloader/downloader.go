@@ -134,7 +134,6 @@ func (d *Downloader) downloadFile(url, dest string) error {
 		return fmt.Errorf("failed to create request: %w", err)
 	}
 
-	//nolint:gosec // URL is constructed from hardcoded GitHub releases URL and validated version
 	resp, err := d.httpClient.Do(req)
 	if err != nil {
 		return fmt.Errorf("HTTP request failed: %w", err)
@@ -172,7 +171,6 @@ func (d *Downloader) verifyChecksum(archivePath, checksumURL string) error {
 		return nil
 	}
 
-	//nolint:gosec // URL is constructed from hardcoded GitHub releases URL and validated version
 	resp, err := d.httpClient.Do(req)
 	if err != nil {
 		// Checksum file might not exist for all versions, skip verification
@@ -264,7 +262,6 @@ func (d *Downloader) extractArchive(archivePath, destDir string) error {
 				return err
 			}
 
-			//nolint:gosec // Writing to stderr, not a web context - XSS not applicable
 			fmt.Fprintf(os.Stderr, "✓ Extracted binary to %s\n", target)
 
 			return nil // Found and extracted the binary
@@ -293,7 +290,6 @@ func (d *Downloader) extractFile(reader io.Reader, target string, mode int64) er
 
 	// Make executable on Unix systems
 	if d.config.OS != "windows" {
-		//nolint:gosec // Path is validated using filepath.Base() to prevent traversal
 		if err := os.Chmod(target, executablePermission); err != nil {
 			return fmt.Errorf("failed to set executable permissions: %w", err)
 		}
