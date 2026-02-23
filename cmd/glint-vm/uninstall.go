@@ -4,7 +4,7 @@ import (
 	"fmt"
 
 	"github.com/rs/zerolog/log"
-	"github.com/urfave/cli/v2"
+	"github.com/urfave/cli/v3"
 	"github.com/youkoulayley/glint-vm/internal/config"
 	"github.com/youkoulayley/glint-vm/internal/downloader"
 )

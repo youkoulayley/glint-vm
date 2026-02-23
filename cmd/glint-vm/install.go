@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/urfave/cli/v2"
+	"github.com/urfave/cli/v3"
 	"github.com/youkoulayley/glint-vm/internal/config"
 	"github.com/youkoulayley/glint-vm/internal/downloader"
 	"github.com/youkoulayley/glint-vm/internal/shell"

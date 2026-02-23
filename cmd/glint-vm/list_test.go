@@ -4,7 +4,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/urfave/cli/v2"
+	"github.com/urfave/cli/v3"
 )
 
 func TestListCommand_NoVersions(t *testing.T) { //nolint:paralleltest // uses t.Setenv via setupTestEnv
