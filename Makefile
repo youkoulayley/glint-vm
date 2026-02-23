@@ -74,7 +74,7 @@ fmt: ## Format code
 
 lint: build ## Run golangci-lint via glint-vm
 	@echo "Running linter with glint-vm..."
-	@eval "$$(./$(DIST_DIR)/$(BINARY_NAME) use v2.7.2)" && golangci-lint run
+	golangci-lint run
 
 clean: ## Clean build artifacts
 	@echo "Cleaning..."
