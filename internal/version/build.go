@@ -3,9 +3,9 @@ package version
 // This file is auto-generated during build. Do not edit manually.
 
 const (
-	versionValue = "7b64aeb"
-	commitValue  = "7b64aeb"
-	dateValue    = "2026-02-23T10:43:51Z"
+	versionValue = "dffaa66"
+	commitValue  = "dffaa66"
+	dateValue    = "2026-02-23T10:47:28Z"
 )
 
 func getVersion() string {
