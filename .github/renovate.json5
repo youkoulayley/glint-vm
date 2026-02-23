@@ -1,0 +1,61 @@
+{
+  $schema: 'https://docs.renovatebot.com/renovate-schema.json',
+  extends: [
+    'config:recommended',
+    'helpers:pinGitHubActionDigests',
+  ],
+  hostRules: [
+    {
+      abortIgnoreStatusCodes: [
+        404,
+      ],
+      abortOnError: true,
+    },
+  ],
+  enabledManagers: [
+    'github-actions',
+    'custom.regex',
+    'gomod',
+  ],
+  customManagers: [
+    {
+      customType: 'regex',
+      managerFilePatterns: [
+        '/(^|/)(workflow-templates|\\.(?:github|gitea|forgejo)/(?:workflows|actions))/.+\\.ya?ml$/',
+        '/(^|/)action\\.ya?ml$/',
+      ],
+      matchStrings: [
+        '# renovate: datasource=(?<datasource>[a-zA-Z0-9-._]+?) depName=(?<depName>[^\\s]+?)(?: (?:lookupName|packageName)=(?<packageName>[^\\s]+?))?(?: versioning=(?<versioning>[^\\s]+?))?(?: extractVersion=(?<extractVersion>[^\\s]+?))?(?: registryUrl=(?<registryUrl>[^\\s]+?))?\\s+[A-Za-z0-9_]+?_VERSION\\s*:\\s*["\']?(?<currentValue>.+?)["\']?\\s',
+      ],
+    },
+  ],
+  labels: [
+    'infrastructure',
+  ],
+  minimumReleaseAge: '3 days',
+  packageRules: [
+    {
+      matchManagers: [
+        'gomod',
+      ],
+      matchDatasources: [
+        'go',
+      ],
+    },
+    {
+      groupName: 'GitHub actions',
+      groupSlug: 'gh-actions',
+      matchManagers: [
+        'github-actions',
+      ],
+      rangeStrategy: 'pin',
+    },
+  ],
+  postUpdateOptions: [
+    'gomodTidy',
+    'gomodMassage',
+    'gomodUpdateImportPaths',
+  ],
+  ignoreDeps: [],
+  semanticCommits: 'enabled',
+}
