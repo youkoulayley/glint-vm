@@ -1,4 +1,6 @@
 // Package version provides build-time version information.
+//
+//nolint:revive // "version" is not actually a standard library package
 package version
 
 // Get returns the version string.

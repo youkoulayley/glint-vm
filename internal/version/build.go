@@ -3,9 +3,9 @@ package version
 // This file is auto-generated during build. Do not edit manually.
 
 const (
-	versionValue = "aca8d98-dirty"
-	commitValue  = "aca8d98"
-	dateValue    = "2026-01-15T09:09:52Z"
+	versionValue = "191e0f4-dirty"
+	commitValue  = "191e0f4"
+	dateValue    = "2026-02-23T10:19:09Z"
 )
 
 func getVersion() string {
