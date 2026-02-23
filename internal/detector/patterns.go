@@ -43,11 +43,14 @@ func newPattern(name, pattern string) *VersionPattern {
 // createPatterns creates and returns all version patterns.
 func createPatterns() *patternSet {
 	return &patternSet{
-		atVersion:          newPattern("at-version", `golangci-lint@(v?\d+\.\d+\.\d+)`),
-		envVersion:         newPattern("env-version", `GOLANGCI_LINT_VERSION[=:\s]+['"]?(v?\d+\.\d+\.\d+)['"]?`),
-		yamlVersion:        newPattern("yaml-version", `version:\s*['"]?(v?\d+\.\d+\.\d+)['"]?`),
-		dockerImage:        newPattern("docker-image", `golangci/golangci-lint:(v?\d+\.\d+\.\d+)`),
-		actionVersion:      newPattern("action-version", `golangci-lint-action@v\d+.*?version:\s*['"]?(v?\d+\.\d+\.\d+)['"]?`),
+		atVersion:   newPattern("at-version", `golangci-lint@(v?\d+\.\d+\.\d+)`),
+		envVersion:  newPattern("env-version", `GOLANGCI_LINT_VERSION[=:\s]+['"]?(v?\d+\.\d+\.\d+)['"]?`),
+		yamlVersion: newPattern("yaml-version", `version:\s*['"]?(v?\d+\.\d+\.\d+)['"]?`),
+		dockerImage: newPattern("docker-image", `golangci/golangci-lint:(v?\d+\.\d+\.\d+)`),
+		actionVersion: newPattern(
+			"action-version",
+			`golangci-lint-action@v\d+.*?version:\s*['"]?(v?\d+\.\d+\.\d+)['"]?`,
+		),
 		makefileAssign:     newPattern("makefile-assign", `GOLANGCI_LINT_VERSION\s*:?=\s*['"]?(v?\d+\.\d+\.\d+)['"]?`),
 		cliVersion:         newPattern("cli-version", `golangci-lint.*?--version\s+(v?\d+\.\d+\.\d+)`),
 		altEnv:             newPattern("alt-env", `GOLANGCI_VERSION[=:\s]+['"]?(v?\d+\.\d+\.\d+)['"]?`),
