@@ -9,7 +9,9 @@ BUILD_DATE := $(shell date -u +"%Y-%m-%dT%H:%M:%SZ")
 # Go variables
 GO := go
 GOFLAGS := -trimpath
-LDFLAGS :=
+LDFLAGS := -X 'github.com/youkoulayley/glint-vm/internal/version.versionValue=$(VERSION)' \
+           -X 'github.com/youkoulayley/glint-vm/internal/version.commitValue=$(COMMIT)' \
+           -X 'github.com/youkoulayley/glint-vm/internal/version.dateValue=$(BUILD_DATE)'
 
 # Directories
 BUILD_DIR := build
@@ -23,28 +25,7 @@ all: build ## Build the binary
 build: ## Build for current platform
 	@echo "Building $(BINARY_NAME) $(VERSION)..."
 	@mkdir -p $(DIST_DIR)
-	@echo 'package version' > internal/version/build.go
-	@echo '' >> internal/version/build.go
-	@echo '// This file is auto-generated during build. Do not edit manually.' >> internal/version/build.go
-	@echo '' >> internal/version/build.go
-	@echo 'const (' >> internal/version/build.go
-	@echo '	versionValue = "$(VERSION)"' >> internal/version/build.go
-	@echo '	commitValue  = "$(COMMIT)"' >> internal/version/build.go
-	@echo '	dateValue    = "$(BUILD_DATE)"' >> internal/version/build.go
-	@echo ')' >> internal/version/build.go
-	@echo '' >> internal/version/build.go
-	@echo 'func getVersion() string {' >> internal/version/build.go
-	@echo '	return versionValue' >> internal/version/build.go
-	@echo '}' >> internal/version/build.go
-	@echo '' >> internal/version/build.go
-	@echo 'func getCommit() string {' >> internal/version/build.go
-	@echo '	return commitValue' >> internal/version/build.go
-	@echo '}' >> internal/version/build.go
-	@echo '' >> internal/version/build.go
-	@echo 'func getDate() string {' >> internal/version/build.go
-	@echo '	return dateValue' >> internal/version/build.go
-	@echo '}' >> internal/version/build.go
-	$(GO) build $(GOFLAGS) -o $(DIST_DIR)/$(BINARY_NAME) ./cmd/glint-vm
+	$(GO) build $(GOFLAGS) -ldflags "$(LDFLAGS)" -o $(DIST_DIR)/$(BINARY_NAME) ./cmd/glint-vm
 	@echo "✓ Built $(DIST_DIR)/$(BINARY_NAME)"
 
 install: build ## Install to /usr/local/bin
@@ -84,46 +65,25 @@ clean: ## Clean build artifacts
 cross-compile: ## Build for all platforms
 	@echo "Cross-compiling for all platforms..."
 	@mkdir -p $(DIST_DIR)
-	@echo 'package version' > internal/version/build.go
-	@echo '' >> internal/version/build.go
-	@echo '// This file is auto-generated during build. Do not edit manually.' >> internal/version/build.go
-	@echo '' >> internal/version/build.go
-	@echo 'const (' >> internal/version/build.go
-	@echo '	versionValue = "$(VERSION)"' >> internal/version/build.go
-	@echo '	commitValue  = "$(COMMIT)"' >> internal/version/build.go
-	@echo '	dateValue    = "$(BUILD_DATE)"' >> internal/version/build.go
-	@echo ')' >> internal/version/build.go
-	@echo '' >> internal/version/build.go
-	@echo 'func getVersion() string {' >> internal/version/build.go
-	@echo '	return versionValue' >> internal/version/build.go
-	@echo '}' >> internal/version/build.go
-	@echo '' >> internal/version/build.go
-	@echo 'func getCommit() string {' >> internal/version/build.go
-	@echo '	return commitValue' >> internal/version/build.go
-	@echo '}' >> internal/version/build.go
-	@echo '' >> internal/version/build.go
-	@echo 'func getDate() string {' >> internal/version/build.go
-	@echo '	return dateValue' >> internal/version/build.go
-	@echo '}' >> internal/version/build.go
 
 	@echo "Building for Linux amd64..."
-	@GOOS=linux GOARCH=amd64 $(GO) build $(GOFLAGS) \
+	@GOOS=linux GOARCH=amd64 $(GO) build $(GOFLAGS) -ldflags "$(LDFLAGS)" \
 		-o $(DIST_DIR)/$(BINARY_NAME)-linux-amd64 ./cmd/glint-vm
 
 	@echo "Building for Linux arm64..."
-	@GOOS=linux GOARCH=arm64 $(GO) build $(GOFLAGS) \
+	@GOOS=linux GOARCH=arm64 $(GO) build $(GOFLAGS) -ldflags "$(LDFLAGS)" \
 		-o $(DIST_DIR)/$(BINARY_NAME)-linux-arm64 ./cmd/glint-vm
 
 	@echo "Building for macOS amd64..."
-	@GOOS=darwin GOARCH=amd64 $(GO) build $(GOFLAGS) \
+	@GOOS=darwin GOARCH=amd64 $(GO) build $(GOFLAGS) -ldflags "$(LDFLAGS)" \
 		-o $(DIST_DIR)/$(BINARY_NAME)-darwin-amd64 ./cmd/glint-vm
 
 	@echo "Building for macOS arm64..."
-	@GOOS=darwin GOARCH=arm64 $(GO) build $(GOFLAGS) \
+	@GOOS=darwin GOARCH=arm64 $(GO) build $(GOFLAGS) -ldflags "$(LDFLAGS)" \
 		-o $(DIST_DIR)/$(BINARY_NAME)-darwin-arm64 ./cmd/glint-vm
 
 	@echo "Building for Windows amd64..."
-	@GOOS=windows GOARCH=amd64 $(GO) build $(GOFLAGS) \
+	@GOOS=windows GOARCH=amd64 $(GO) build $(GOFLAGS) -ldflags "$(LDFLAGS)" \
 		-o $(DIST_DIR)/$(BINARY_NAME)-windows-amd64.exe ./cmd/glint-vm
 
 	@echo "✓ Cross-compilation complete. Binaries in $(DIST_DIR)/"
