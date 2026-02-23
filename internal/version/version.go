@@ -3,22 +3,29 @@
 //nolint:revive // "version" is not actually a standard library package
 package version
 
+// These variables are set via ldflags during build.
+var (
+	versionValue = "dev"
+	commitValue  = "unknown"
+	dateValue    = "unknown"
+)
+
 // Get returns the version string.
 func Get() string {
-	return getVersion()
+	return versionValue
 }
 
 // GetCommit returns the commit hash.
 func GetCommit() string {
-	return getCommit()
+	return commitValue
 }
 
 // GetDate returns the build date.
 func GetDate() string {
-	return getDate()
+	return dateValue
 }
 
 // Info returns the build version information.
 func Info() (string, string, string) {
-	return getVersion(), getCommit(), getDate()
+	return versionValue, commitValue, dateValue
 }
