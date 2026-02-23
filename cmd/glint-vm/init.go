@@ -1,16 +1,17 @@
 package main
 
 import (
+	"context"
 	"fmt"
 
-	"github.com/urfave/cli/v2"
+	"github.com/urfave/cli/v3"
 	"github.com/youkoulayley/glint-vm/internal/shell"
 )
 
 // initCommand generates shell initialization code.
-func initCommand(ctx *cli.Context) error {
+func initCommand(_ context.Context, cmd *cli.Command) error {
 	// Get shell name from arguments (first non-flag argument)
-	shellName := ctx.Args().First()
+	shellName := cmd.Args().First()
 	if shellName == "" {
 		shellName = shell.DetectShell()
 	}
@@ -21,7 +22,7 @@ func initCommand(ctx *cli.Context) error {
 	}
 
 	opts := shell.InitOptions{
-		AutoSwitch: ctx.Bool("auto-switch"),
+		AutoSwitch: cmd.Bool("auto-switch"),
 	}
 
 	output := integrator.GenerateInit(opts)

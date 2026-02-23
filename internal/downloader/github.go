@@ -25,10 +25,10 @@ type GitHubRelease struct {
 }
 
 // FetchAvailableVersions fetches available golangci-lint versions from GitHub.
-func FetchAvailableVersions(limit int) ([]GitHubRelease, error) {
+func FetchAvailableVersions(ctx context.Context, limit int) ([]GitHubRelease, error) {
 	url := fmt.Sprintf("%s?per_page=%d", githubAPIURL, limit)
 
-	req, err := http.NewRequestWithContext(context.Background(), http.MethodGet, url, http.NoBody)
+	req, err := http.NewRequestWithContext(ctx, http.MethodGet, url, http.NoBody)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create request: %w", err)
 	}

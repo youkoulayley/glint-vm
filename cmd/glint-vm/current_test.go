@@ -1,12 +1,13 @@
 package main
 
 import (
+	"context"
 	"os"
 	"path/filepath"
 	"strings"
 	"testing"
 
-	"github.com/urfave/cli/v2"
+	"github.com/urfave/cli/v3"
 	"github.com/youkoulayley/glint-vm/internal/config"
 )
 
@@ -14,7 +15,7 @@ func TestCurrentCommand_NoVersion(t *testing.T) { //nolint:paralleltest // use S
 	_, cleanup := setupTestEnv(t)
 	defer cleanup()
 
-	app := &cli.App{
+	app := &cli.Command{
 		Commands: []*cli.Command{
 			{
 				Name:   "current",
@@ -24,7 +25,7 @@ func TestCurrentCommand_NoVersion(t *testing.T) { //nolint:paralleltest // use S
 	}
 
 	output := captureOutput(func() {
-		_ = app.Run([]string{"glint-vm", "current"})
+		_ = app.Run(context.Background(), []string{"glint-vm", "current"})
 	})
 
 	if !strings.Contains(output, "No version currently active") {
@@ -68,7 +69,7 @@ func TestCurrentCommand_WithVersion(t *testing.T) { //nolint:paralleltest // use
 		t.Fatalf("Failed to set current version: %v", err)
 	}
 
-	app := &cli.App{
+	app := &cli.Command{
 		Commands: []*cli.Command{
 			{
 				Name:   "current",
@@ -78,7 +79,7 @@ func TestCurrentCommand_WithVersion(t *testing.T) { //nolint:paralleltest // use
 	}
 
 	output := captureOutput(func() {
-		_ = app.Run([]string{"glint-vm", "current"})
+		_ = app.Run(context.Background(), []string{"glint-vm", "current"})
 	})
 
 	if !strings.Contains(output, "v1.55.2") {

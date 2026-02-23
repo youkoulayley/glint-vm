@@ -2,10 +2,11 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"os"
 
-	"github.com/urfave/cli/v2"
+	"github.com/urfave/cli/v3"
 	"github.com/youkoulayley/glint-vm/internal/version"
 )
 
@@ -15,7 +16,7 @@ const (
 )
 
 func main() {
-	app := &cli.App{
+	app := &cli.Command{
 		Name:                   "glint-vm",
 		Usage:                  "golangci-lint version manager - like gvm/nvm for golangci-lint",
 		UseShortOptionHandling: true,
@@ -129,7 +130,7 @@ func main() {
 			{
 				Name:  "cache",
 				Usage: "Manage cached golangci-lint versions",
-				Subcommands: []*cli.Command{
+				Commands: []*cli.Command{
 					{
 						Name:   "list",
 						Usage:  "List all cached versions",
@@ -156,10 +157,10 @@ func main() {
 				},
 			},
 		},
-		EnableBashCompletion: true,
+		EnableShellCompletion: true,
 	}
 
-	err := app.Run(os.Args)
+	err := app.Run(context.Background(), os.Args)
 	if err != nil {
 		_, _ = fmt.Fprintf(os.Stderr, "Error: %v\n", err)
 

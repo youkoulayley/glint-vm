@@ -1,15 +1,16 @@
 package main
 
 import (
+	"context"
 	"fmt"
 
-	"github.com/urfave/cli/v2"
+	"github.com/urfave/cli/v3"
 	"github.com/youkoulayley/glint-vm/internal/config"
 	"github.com/youkoulayley/glint-vm/internal/downloader"
 )
 
 // listCommand lists all installed versions.
-func listCommand(_ *cli.Context) error {
+func listCommand(_ context.Context, _ *cli.Command) error {
 	cfg, err := config.New()
 	if err != nil {
 		return fmt.Errorf("failed to initialize config: %w", err)

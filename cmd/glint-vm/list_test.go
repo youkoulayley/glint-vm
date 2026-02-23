@@ -1,17 +1,18 @@
 package main
 
 import (
+	"context"
 	"strings"
 	"testing"
 
-	"github.com/urfave/cli/v2"
+	"github.com/urfave/cli/v3"
 )
 
 func TestListCommand_NoVersions(t *testing.T) { //nolint:paralleltest // uses t.Setenv via setupTestEnv
 	_, cleanup := setupTestEnv(t)
 	defer cleanup()
 
-	app := &cli.App{
+	app := &cli.Command{
 		Commands: []*cli.Command{
 			{
 				Name:   "list",
@@ -21,7 +22,7 @@ func TestListCommand_NoVersions(t *testing.T) { //nolint:paralleltest // uses t.
 	}
 
 	output := captureOutput(func() {
-		_ = app.Run([]string{"glint-vm", "list"})
+		_ = app.Run(context.Background(), []string{"glint-vm", "list"})
 	})
 
 	if !strings.Contains(output, "No versions installed") {

@@ -1,10 +1,11 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"os"
 
-	"github.com/urfave/cli/v2"
+	"github.com/urfave/cli/v3"
 	"github.com/youkoulayley/glint-vm/internal/config"
 	"github.com/youkoulayley/glint-vm/internal/detector"
 	"github.com/youkoulayley/glint-vm/internal/downloader"
@@ -12,7 +13,7 @@ import (
 )
 
 // detectCommand shows the detected version and source.
-func detectCommand(ctx *cli.Context) error {
+func detectCommand(ctx context.Context, cmd *cli.Command) error {
 	cfg, err := config.New()
 	if err != nil {
 		return fmt.Errorf("failed to initialize config: %w", err)
@@ -29,7 +30,7 @@ func detectCommand(ctx *cli.Context) error {
 	}
 
 	if result == nil {
-		if ctx.Bool("quiet") {
+		if cmd.Bool("quiet") {
 			os.Exit(1)
 		}
 
@@ -50,13 +51,13 @@ func detectCommand(ctx *cli.Context) error {
 
 	version := result.Version
 
-	if ctx.Bool("use") {
+	if cmd.Bool("use") {
 		dl, err := downloader.NewDownloader()
 		if err != nil {
 			return fmt.Errorf("failed to initialize downloader: %w", err)
 		}
 
-		if err = dl.Download(version); err != nil {
+		if err = dl.Download(ctx, version); err != nil {
 			return fmt.Errorf("download failed: %w", err)
 		}
 
@@ -77,13 +78,13 @@ func detectCommand(ctx *cli.Context) error {
 		return nil
 	}
 
-	if ctx.Bool("install") {
+	if cmd.Bool("install") {
 		dl, err := downloader.NewDownloader()
 		if err != nil {
 			return fmt.Errorf("failed to initialize downloader: %w", err)
 		}
 
-		if err = dl.Download(version); err != nil {
+		if err = dl.Download(ctx, version); err != nil {
 			return fmt.Errorf("download failed: %w", err)
 		}
 
@@ -95,7 +96,7 @@ func detectCommand(ctx *cli.Context) error {
 		return nil
 	}
 
-	if ctx.Bool("quiet") {
+	if cmd.Bool("quiet") {
 		fmt.Println(version)
 
 		return nil

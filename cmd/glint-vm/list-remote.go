@@ -1,21 +1,22 @@
 package main
 
 import (
+	"context"
 	"fmt"
 
-	"github.com/urfave/cli/v2"
+	"github.com/urfave/cli/v3"
 	"github.com/youkoulayley/glint-vm/internal/config"
 	"github.com/youkoulayley/glint-vm/internal/downloader"
 )
 
 // listRemoteCommand lists available versions from GitHub.
-func listRemoteCommand(c *cli.Context) error {
-	limit := c.Int("limit")
+func listRemoteCommand(ctx context.Context, cmd *cli.Command) error {
+	limit := cmd.Int("limit")
 
 	fmt.Println("Fetching available golangci-lint versions from GitHub...")
 	fmt.Println()
 
-	releases, err := downloader.FetchAvailableVersions(limit)
+	releases, err := downloader.FetchAvailableVersions(ctx, limit)
 	if err != nil {
 		return fmt.Errorf("failed to fetch versions: %w", err)
 	}

@@ -1,12 +1,13 @@
 package main
 
 import (
+	"context"
 	"os"
 	"path/filepath"
 	"strings"
 	"testing"
 
-	"github.com/urfave/cli/v2"
+	"github.com/urfave/cli/v3"
 )
 
 func TestDetectCommand_NoVersion(t *testing.T) { //nolint:paralleltest // uses t.Setenv via setupTestEnv
@@ -25,7 +26,7 @@ func TestDetectCommand_NoVersion(t *testing.T) { //nolint:paralleltest // uses t
 	t.Chdir(projectDir)
 	t.Chdir(oldWd)
 
-	app := &cli.App{
+	app := &cli.Command{
 		Commands: []*cli.Command{
 			{
 				Name:   "detect",
@@ -35,7 +36,7 @@ func TestDetectCommand_NoVersion(t *testing.T) { //nolint:paralleltest // uses t
 	}
 
 	output := captureOutput(func() {
-		_ = app.Run([]string{"glint-vm", "detect"})
+		_ = app.Run(context.Background(), []string{"glint-vm", "detect"})
 	})
 
 	if !strings.Contains(output, "No golangci-lint version detected") {

@@ -1,33 +1,34 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"os"
 
-	"github.com/urfave/cli/v2"
+	"github.com/urfave/cli/v3"
 	"github.com/youkoulayley/glint-vm/internal/config"
 	"github.com/youkoulayley/glint-vm/internal/downloader"
 	"github.com/youkoulayley/glint-vm/internal/shell"
 )
 
 // installCommand pre-downloads a specific version.
-func installCommand(ctx *cli.Context) error {
-	if ctx.NArg() < 1 {
+func installCommand(ctx context.Context, cmd *cli.Command) error {
+	if cmd.NArg() < 1 {
 		return ErrVersionRequired
 	}
 
-	version := config.NormalizeVersion(ctx.Args().First())
+	version := config.NormalizeVersion(cmd.Args().First())
 
 	dl, err := downloader.NewDownloader()
 	if err != nil {
 		return fmt.Errorf("failed to initialize downloader: %w", err)
 	}
 
-	if err := dl.Download(version); err != nil {
+	if err := dl.Download(ctx, version); err != nil {
 		return fmt.Errorf("download failed: %w", err)
 	}
 
-	if ctx.Bool("use") {
+	if cmd.Bool("use") {
 		cfg, err := config.New()
 		if err != nil {
 			return fmt.Errorf("failed to initialize config: %w", err)
