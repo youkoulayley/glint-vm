@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"fmt"
 
 	"github.com/urfave/cli/v3"
@@ -10,19 +11,19 @@ import (
 )
 
 // useCommand activates a specific version in the current shell.
-func useCommand(c *cli.Context) error {
-	if c.NArg() < 1 {
+func useCommand(ctx context.Context, cmd *cli.Command) error {
+	if cmd.NArg() < 1 {
 		return ErrVersionRequired
 	}
 
-	version := config.NormalizeVersion(c.Args().First())
+	version := config.NormalizeVersion(cmd.Args().First())
 
 	dl, err := downloader.NewDownloader()
 	if err != nil {
 		return fmt.Errorf("failed to initialize downloader: %w", err)
 	}
 
-	if err := dl.Download(version); err != nil {
+	if err := dl.Download(ctx, version); err != nil {
 		return fmt.Errorf("failed to download golangci-lint: %w", err)
 	}
 

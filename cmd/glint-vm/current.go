@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"fmt"
 
 	"github.com/urfave/cli/v3"
@@ -8,7 +9,7 @@ import (
 )
 
 // currentCommand shows the currently active version.
-func currentCommand(_ *cli.Context) error {
+func currentCommand(_ context.Context, _ *cli.Command) error {
 	cfg, err := config.New()
 	if err != nil {
 		return fmt.Errorf("failed to initialize config: %w", err)

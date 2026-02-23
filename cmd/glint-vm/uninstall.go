@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"fmt"
 
 	"github.com/rs/zerolog/log"
@@ -10,12 +11,12 @@ import (
 )
 
 // uninstallCommand removes a specific version.
-func uninstallCommand(c *cli.Context) error {
-	if c.NArg() < 1 {
+func uninstallCommand(_ context.Context, cmd *cli.Command) error {
+	if cmd.NArg() < 1 {
 		return ErrVersionRequired
 	}
 
-	version := config.NormalizeVersion(c.Args().First())
+	version := config.NormalizeVersion(cmd.Args().First())
 
 	cfg, err := config.New()
 	if err != nil {

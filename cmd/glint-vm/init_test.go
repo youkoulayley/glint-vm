@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"strings"
 	"testing"
 
@@ -11,7 +12,7 @@ func TestInitCommand_Bash(t *testing.T) { //nolint:paralleltest // uses t.Setenv
 	_, cleanup := setupTestEnv(t)
 	defer cleanup()
 
-	app := &cli.App{
+	app := &cli.Command{
 		Commands: []*cli.Command{
 			{
 				Name: "init",
@@ -24,7 +25,7 @@ func TestInitCommand_Bash(t *testing.T) { //nolint:paralleltest // uses t.Setenv
 	}
 
 	output := captureOutput(func() {
-		_ = app.Run([]string{"glint-vm", "init", "bash"})
+		_ = app.Run(context.Background(), []string{"glint-vm", "init", "bash"})
 	})
 
 	if !strings.Contains(output, "export GLINT_VM_ROOT=") {
@@ -48,7 +49,7 @@ func TestInitCommand_Bash_AutoSwitch(t *testing.T) { //nolint:paralleltest // us
 	_, cleanup := setupTestEnv(t)
 	defer cleanup()
 
-	app := &cli.App{
+	app := &cli.Command{
 		Commands: []*cli.Command{
 			{
 				Name: "init",
@@ -61,7 +62,7 @@ func TestInitCommand_Bash_AutoSwitch(t *testing.T) { //nolint:paralleltest // us
 	}
 
 	output := captureOutput(func() {
-		_ = app.Run([]string{"glint-vm", "init", "--auto-switch", "bash"})
+		_ = app.Run(context.Background(), []string{"glint-vm", "init", "--auto-switch", "bash"})
 	})
 
 	if !strings.Contains(output, "_glint_vm_auto_switch") {
@@ -77,7 +78,7 @@ func TestInitCommand_Zsh(t *testing.T) { //nolint:paralleltest // uses t.Setenv 
 	_, cleanup := setupTestEnv(t)
 	defer cleanup()
 
-	app := &cli.App{
+	app := &cli.Command{
 		Commands: []*cli.Command{
 			{
 				Name: "init",
@@ -90,7 +91,7 @@ func TestInitCommand_Zsh(t *testing.T) { //nolint:paralleltest // uses t.Setenv 
 	}
 
 	output := captureOutput(func() {
-		_ = app.Run([]string{"glint-vm", "init", "zsh"})
+		_ = app.Run(context.Background(), []string{"glint-vm", "init", "zsh"})
 	})
 
 	if !strings.Contains(output, "export GLINT_VM_ROOT=") {
@@ -106,7 +107,7 @@ func TestInitCommand_Zsh_AutoSwitch(t *testing.T) { //nolint:paralleltest // use
 	_, cleanup := setupTestEnv(t)
 	defer cleanup()
 
-	app := &cli.App{
+	app := &cli.Command{
 		Commands: []*cli.Command{
 			{
 				Name: "init",
@@ -119,7 +120,7 @@ func TestInitCommand_Zsh_AutoSwitch(t *testing.T) { //nolint:paralleltest // use
 	}
 
 	output := captureOutput(func() {
-		_ = app.Run([]string{"glint-vm", "init", "--auto-switch", "zsh"})
+		_ = app.Run(context.Background(), []string{"glint-vm", "init", "--auto-switch", "zsh"})
 	})
 
 	if !strings.Contains(output, "_glint_vm_auto_switch") {

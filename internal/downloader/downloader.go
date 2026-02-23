@@ -54,7 +54,7 @@ func NewDownloader() (*Downloader, error) {
 }
 
 // Download downloads and installs a specific version of golangci-lint.
-func (d *Downloader) Download(version string) error {
+func (d *Downloader) Download(ctx context.Context, version string) error {
 	version = config.NormalizeVersion(version)
 
 	// Check if already cached
@@ -79,13 +79,13 @@ func (d *Downloader) Download(version string) error {
 	archivePath := filepath.Join(versionDir, "archive.tar.gz")
 
 	// Download archive
-	err = d.downloadFile(archiveURL, archivePath)
+	err = d.downloadFile(ctx, archiveURL, archivePath)
 	if err != nil {
 		return fmt.Errorf("failed to download archive: %w", err)
 	}
 
 	// Download and verify checksum
-	err = d.verifyChecksum(archivePath, checksumURL)
+	err = d.verifyChecksum(ctx, archivePath, checksumURL)
 	if err != nil {
 		// Checksum verification failed, clean up
 		_ = os.RemoveAll(versionDir)
@@ -128,8 +128,8 @@ func (d *Downloader) getDownloadURL(version string) string {
 }
 
 // downloadFile downloads a file from URL to destination.
-func (d *Downloader) downloadFile(url, dest string) error {
-	req, err := http.NewRequestWithContext(context.Background(), http.MethodGet, url, http.NoBody)
+func (d *Downloader) downloadFile(ctx context.Context, url, dest string) error {
+	req, err := http.NewRequestWithContext(ctx, http.MethodGet, url, http.NoBody)
 	if err != nil {
 		return fmt.Errorf("failed to create request: %w", err)
 	}
@@ -163,9 +163,9 @@ func (d *Downloader) downloadFile(url, dest string) error {
 }
 
 // verifyChecksum downloads the checksum file and verifies the archive.
-func (d *Downloader) verifyChecksum(archivePath, checksumURL string) error {
+func (d *Downloader) verifyChecksum(ctx context.Context, archivePath, checksumURL string) error {
 	// Download checksum file
-	req, err := http.NewRequestWithContext(context.Background(), http.MethodGet, checksumURL, http.NoBody)
+	req, err := http.NewRequestWithContext(ctx, http.MethodGet, checksumURL, http.NoBody)
 	if err != nil {
 		fmt.Fprintln(os.Stderr, "Warning: Could not create checksum request, skipping verification")
 

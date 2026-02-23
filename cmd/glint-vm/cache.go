@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"fmt"
 
 	"github.com/urfave/cli/v3"
@@ -13,7 +14,7 @@ const (
 )
 
 // cacheListCommand lists all cached versions.
-func cacheListCommand(_ *cli.Context) error {
+func cacheListCommand(_ context.Context, _ *cli.Command) error {
 	cacheManager, err := downloader.NewCacheManager()
 	if err != nil {
 		return fmt.Errorf("failed to initialize cache manager: %w", err)
@@ -65,13 +66,13 @@ func cacheListCommand(_ *cli.Context) error {
 }
 
 // cacheCleanCommand removes old cached versions.
-func cacheCleanCommand(ctx *cli.Context) error {
+func cacheCleanCommand(_ context.Context, cmd *cli.Command) error {
 	cacheManager, err := downloader.NewCacheManager()
 	if err != nil {
 		return fmt.Errorf("failed to initialize cache manager: %w", err)
 	}
 
-	if ctx.Bool("all") {
+	if cmd.Bool("all") {
 		fmt.Println("Removing all cached versions...")
 
 		removed, err := cacheManager.RemoveAll()
@@ -84,7 +85,7 @@ func cacheCleanCommand(ctx *cli.Context) error {
 		return nil
 	}
 
-	keep := ctx.Int("keep")
+	keep := cmd.Int("keep")
 	fmt.Printf("Removing old versions (keeping %d most recent)...\n", keep)
 
 	removed, err := cacheManager.RemoveOldest(keep)
